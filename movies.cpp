@@ -32,12 +32,12 @@ void MovieList::accumulateMovies(int index, vector<int>& movieIndexes){ //this f
     return;
 }
 
-int MovieList::findPrefixIndex(const string& prefix){//this function finds which index within Trie the specified prefix ends
+int MovieList::findPrefixIndex(const string& prefix){ //this function finds which index within Trie the specified prefix ends
     int currIndex = 0;
 
-    for(char c:prefix){
-        auto& letterMapping = trie.at(currIndex).next;
-        auto letterTracker = letterMapping.find(c);
+    for(char c:prefix){ // iterates through each character in the prefix
+        auto& letterMapping = trie.at(currIndex).next; // gets the hashmap for 
+        auto letterTracker = letterMapping.find(c); //
         if(letterTracker==letterMapping.end()){
             return -1;
         }

@@ -54,8 +54,13 @@ int main(int argc, char** argv){
     movieFile.close();
 
     if (argc == 2){
-            //print all the movies in ascending alphabetical order of movie names
-            return 0;
+        set<Movie> movie_set;
+        for (auto m : movies) 
+            movie_set.insert(m);
+        cout << endl;
+        for (auto m : movie_set)
+            cout << m.title << ", " << m.rating << endl;
+        return 0;
     }
 
     ifstream prefixFile (argv[2]);

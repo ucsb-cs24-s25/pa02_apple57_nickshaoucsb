@@ -9,6 +9,9 @@ struct Movie {
     string title;
     double rating;
     Movie(string t, double r) : title(t), rating(r) {};
+    bool operator<(const Movie& other) const{
+        return title < other.title;
+    }
 };
 
 
