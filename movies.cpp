@@ -1,6 +1,4 @@
 #include "movies.h"
-#include <unordered_map>
-#include <vector>
 using namespace std; 
 
 void MovieList::insert(const string& MovieTitle, int index){  //int index is the movie's index within global Movies vector
@@ -23,7 +21,7 @@ void MovieList::insert(const string& MovieTitle, int index){  //int index is the
     trie.at(currIndex).titleIndices.push_back(index); //the final node in sequence of characters (the index the final character mapped to) contains the index of the movie in Movies
 }
 
-void accumulateMovies(int index, vector<int>& movieIndexes){ //this function starts from a specified point within Trie (index) and gathers indexes of movies stored within each node's titleIndices
+void MovieList::accumulateMovies(int index, vector<int>& movieIndexes){ //this function starts from a specified point within Trie (index) and gathers indexes of movies stored within each node's titleIndices
     movieIndexes.insert(movieIndexes.end(),trie.at(index).titleIndices.begin(),trie.at(index).titleIndices.end());
 
     for(auto mapping : trie.at(index).next){
@@ -34,7 +32,7 @@ void accumulateMovies(int index, vector<int>& movieIndexes){ //this function sta
     return;
 }
 
-int findPrefixIndex(const string& prefix){//this function finds which index within Trie the specified prefix ends
+int MovieList::findPrefixIndex(const string& prefix){//this function finds which index within Trie the specified prefix ends
     int currIndex = 0;
 
     for(char c:prefix){
