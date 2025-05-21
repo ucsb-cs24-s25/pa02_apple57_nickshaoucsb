@@ -14,10 +14,18 @@
 #include <queue>
 #include <sstream>
 
+#include <chrono>
+
 using namespace std;
 
 #include "utilities.h"
 #include "movies.h"
+
+struct bests{
+    string prefix;
+    string title;
+    double rating;
+};
 
 bool parseLine(string &line, string &movieName, double &movieRating);
 
@@ -77,15 +85,65 @@ int main(int argc, char** argv){
         }
     }
 
+    auto start = chrono::high_resolution_clock::now();//timing utility
+    vector<int> movieIndexes;
+    vector<bests> best;
+    
+    for(int i = 0; i<movies.size(); i++){
+        movie_list.insert(movies.at(i).title,i);
+    }
+
+    // int prefixIndex = movie_list.findPrefixIndex("ab");
+    // movie_list.accumulateMovies(prefixIndex,movieIndexes);
+    // for(auto i:movieIndexes){
+    //     cout<<movies.at(i).title<<endl;
+    // }
+
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
     //  If no movie with that prefix exists print the following message
-    cout << "No movies found with prefix "<<"<replace with prefix>" << endl;
+
+    
+
+    for(string prefix:prefixes){
+        movieIndexes.clear(); 
+        int prefixIndex = movie_list.findPrefixIndex(prefix);
+
+        if(prefixIndex==-1){
+            cout << "No movies found with prefix "<< prefix <<"\n";
+            continue;
+        }
+
+        movie_list.accumulateMovies(prefixIndex,movieIndexes);  // implement sorting by rating and alphabetics
+
+        sort(movieIndexes.begin(), movieIndexes.end(), [&](int firstMovieInd, int secondMovieInd) {   //custom instructions on how to sort movieIndexes (by rating, then by alpha)
+            if (movies.at(firstMovieInd).rating != movies.at(secondMovieInd).rating)
+                return movies.at(firstMovieInd).rating > movies.at(secondMovieInd).rating; //sort by rating first
+            return movies.at(firstMovieInd).title < movies.at(secondMovieInd).title; //if rating equal, sort by alpha
+        });
+
+        bests prefixBests;
+        prefixBests.prefix = prefix;
+        prefixBests.title = movies.at(movieIndexes.at(0)).title;
+        prefixBests.rating = movies.at(movieIndexes.at(0)).rating;   // Maybe this is unoptimal, could try optimizing
+        best.push_back(prefixBests);
+
+        for(auto i:movieIndexes){
+            cout<<movies.at(i).title<<", "<<movies.at(i).rating<<"\n";
+        }
+        cout<<endl;
+    }
+    
+    
 
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
-    cout << "Best movie with prefix " << "<replace with prefix>" << " is: " << "replace with movie name" << " with rating " << std::fixed << std::setprecision(1) << "replace with movie rating" << endl;
-
+    for(auto b:best){
+    cout << "Best movie with prefix " << b.prefix << " is: " << b.title << " with rating " << std::fixed << std::setprecision(1) << b.rating << "\n";
+}
+    auto end = chrono::high_resolution_clock::now();
+    double time_ms = chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0; //timing utility
+    cout <<"Time: "<< time_ms << " ms"<<endl;
     return 0;
 }
 

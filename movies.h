@@ -14,6 +14,11 @@ struct Movie {
     }
 };
 
+struct Node{
+    unordered_map<char,int> next; // unordered map of the next possible characters
+    vector<int> titleIndices; // vector of ints storing indices of movies whose title ends at this letter node (indices within global Movies vector for fast retrieval)
+};
+
 
 
 class MovieList {
@@ -22,10 +27,6 @@ class MovieList {
         void insert(const string& MovieTitle, int index);
         void accumulateMovies(int index, vector<int>& moveIndexes);
         int findPrefixIndex(const string& prefix);
-        struct Node{
-    unordered_map<char,int> next; // unordered map of the next possible characters
-    vector<int> titleIndices; // vector of ints storing indices of movies whose title ends at this letter node (indices within global Movies vector for fast retrieval)
-};
         
     private:
         vector<Node> trie;
