@@ -1,6 +1,6 @@
 // Winter'24
 // Instructor: Diba Mirza
-// Student name: 
+// Student name: Nicholas Shao and Anthony Lenz 
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -25,6 +25,7 @@ struct bests{
     string prefix;
     string title;
     double rating;
+    int bestIndex;
 };
 
 bool parseLine(string &line, string &movieName, double &movieRating);
@@ -85,13 +86,15 @@ int main(int argc, char** argv){
         }
     }
 
+    
+    
+    for(int i = 0; i<movies.size(); i++){
+        movie_list.insert(movies[i].title,i);
+    }
+
     auto start = chrono::high_resolution_clock::now();//timing utility
     vector<int> movieIndexes;
     vector<bests> best;
-    
-    for(int i = 0; i<movies.size(); i++){
-        movie_list.insert(movies.at(i).title,i);
-    }
 
     // int prefixIndex = movie_list.findPrefixIndex("ab");
     // movie_list.accumulateMovies(prefixIndex,movieIndexes);
@@ -105,9 +108,9 @@ int main(int argc, char** argv){
 
     
 
-    for(string prefix:prefixes){
-        movieIndexes.clear(); 
-        int prefixIndex = movie_list.findPrefixIndex(prefix);
+    for(string prefix:prefixes){  // loop runs m times, where m is number of prefixes in prefix.txt
+        movieIndexes.clear();     // clears every element in movieIndexes, as at most k movies can begin with an index,k elements cleared
+        int prefixIndex = movie_list.findPrefixIndex(prefix);   //at worst, the longest prefix is the length of the longest movie name.
 
         if(prefixIndex==-1){
             cout << "No movies found with prefix "<< prefix <<"\n";
@@ -117,19 +120,20 @@ int main(int argc, char** argv){
         movie_list.accumulateMovies(prefixIndex,movieIndexes);  // implement sorting by rating and alphabetics
 
         sort(movieIndexes.begin(), movieIndexes.end(), [&](int firstMovieInd, int secondMovieInd) {   //custom instructions on how to sort movieIndexes (by rating, then by alpha)
-            if (movies.at(firstMovieInd).rating != movies.at(secondMovieInd).rating)
-                return movies.at(firstMovieInd).rating > movies.at(secondMovieInd).rating; //sort by rating first
-            return movies.at(firstMovieInd).title < movies.at(secondMovieInd).title; //if rating equal, sort by alpha
+            if (movies[firstMovieInd].rating != movies[secondMovieInd].rating)
+                return movies[firstMovieInd].rating > movies[secondMovieInd].rating; //sort by rating first
+            return movies[firstMovieInd].title < movies[secondMovieInd].title; //if rating equal, sort by alpha
         });
 
         bests prefixBests;
         prefixBests.prefix = prefix;
-        prefixBests.title = movies.at(movieIndexes.at(0)).title;
-        prefixBests.rating = movies.at(movieIndexes.at(0)).rating;   // Maybe this is unoptimal, could try optimizing
+        prefixBests.bestIndex = movieIndexes[0];
+        //prefixBests.title = movies.at(movieIndexes.at(0)).title;
+        //prefixBests.rating = movies.at(movieIndexes.at(0)).rating;   // Maybe this is unoptimal, could try optimizing
         best.push_back(prefixBests);
 
         for(auto i:movieIndexes){
-            cout<<movies.at(i).title<<", "<<movies.at(i).rating<<"\n";
+            cout<<movies[i].title<<", "<<movies[i].rating<<"\n";
         }
         cout<<endl;
     }
@@ -139,7 +143,7 @@ int main(int argc, char** argv){
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
     for(auto b:best){
-    cout << "Best movie with prefix " << b.prefix << " is: " << b.title << " with rating " << std::fixed << std::setprecision(1) << b.rating << "\n";
+    cout << "Best movie with prefix " << b.prefix << " is: " << movies[b.bestIndex].title << " with rating " << std::fixed << std::setprecision(1) << movies[b.bestIndex].rating << "\n";
 }
     auto end = chrono::high_resolution_clock::now();
     double time_ms = chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0; //timing utility
@@ -147,7 +151,9 @@ int main(int argc, char** argv){
     return 0;
 }
 
-/* Add your run time analysis for part 3 of the assignment here as commented block*/
+/* Add your run time analysis for part 3 of the assignment here as commented block
+
+*/
 
 bool parseLine(string &line, string &movieName, double &movieRating) {
     int commaIndex = line.find_last_of(",");
