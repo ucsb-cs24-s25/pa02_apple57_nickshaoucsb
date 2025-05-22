@@ -55,7 +55,7 @@ int main(int argc, char** argv){
         // to construct your Movie objects
         Movie m(movieName, movieRating);
         // cout << movieName << " has rating " << movieRating << endl;
-        cout << movieName << " has rating " << movieRating << endl;
+        //cout << movieName << " has rating " << movieRating << endl;
         // insert elements into your data structure
         movies.push_back(m);
     }
@@ -147,7 +147,7 @@ int main(int argc, char** argv){
 }
     auto end = chrono::high_resolution_clock::now();
     double time_ms = chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0; //timing utility
-    cout <<"Time: "<< time_ms << " ms"<<endl;
+    //cout <<"Time: "<< time_ms << " ms"<<endl;
     return 0;
 }
 

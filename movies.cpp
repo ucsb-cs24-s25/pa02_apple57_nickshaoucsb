@@ -29,15 +29,6 @@ void MovieList::accumulateMovies(int index, vector<int>& movieIndexes){ //this f
     }
 }
 
-<<<<<<< Updated upstream
-int MovieList::findPrefixIndex(const string& prefix){ //this function finds which index within Trie the specified prefix ends
-    int currIndex = 0;
-
-    for(char c:prefix){ // iterates through each character in the prefix
-        auto& letterMapping = trie.at(currIndex).next; // gets the hashmap for 
-        auto letterTracker = letterMapping.find(c); //
-        if(letterTracker==letterMapping.end()){
-=======
 int MovieList::findPrefixIndex(const string& prefix){//this function finds which index within Trie the specified prefix ends
     int currIndex = 0; //current index within trie aka vector of nodes
 
@@ -45,7 +36,6 @@ int MovieList::findPrefixIndex(const string& prefix){//this function finds which
         auto& letterMapping = trie[currIndex].next; //get the hashmap for the node at currIndex
         auto letterTracker = letterMapping.find(c); //within the mappings for this hashmap, see if there exists a mapping for key char c
         if(letterTracker==letterMapping.end()){ //no mappings for the current char path, means no movies with specified prefix exist
->>>>>>> Stashed changes
             return -1;
         }
         else{
