@@ -65,20 +65,16 @@ int main(int argc, char** argv){
 
     movieFile.close();
 
-    // PART 1
     if (argc == 2){
         set<Movie> movie_set;
         for (auto m : movies) 
             movie_set.insert(m);
-        for (auto it = movie_set.begin(); it != movie_set.end(); ++it)
-            if (next(it) == movie_set.end())
-                cout << it->title << ", " << it->rating;
-            else
-                cout << it->title << ", " << it->rating << endl;
+        cout << endl;
+        for (auto m : movie_set)
+            cout << m.title << ", " << m.rating << endl;
         return 0;
     }
 
-    // PART 2
     ifstream prefixFile (argv[2]);
 
     if (prefixFile.fail()) {
@@ -212,7 +208,8 @@ Therefore, if we store all results, the total extra memory would be O(n * l) + O
 Exploring Tradeoffs:
 We designed our solution with low time complexity in mind. Our target complexity was O(n). 
 I think our solution did not have the lowest possible time complexity, but as a result of that, our space complexity was relatively
-low as well. Every structure used within our solution stayed linear in space complexity except our trie, and even that was not unecessarily large.
+low as well. Every structure used within our solution stayed linear in space complexity except our trie, and even that was not unecessarily large. We never 
+needed to store a movie multiple times, we used indexes instead of movie objects for the trie, and we successfully utilized the fact that many words share prefixes.
 However, it is noteworthy that our trie relied on the specific position of characters (i.e. an 'a' in the front of a word would be a different
 element than an 'a' in as the second character in a word), thus potentially creating a source of minimizable space usage. It is definitely evident
 that if we wanted to achieve an even lower time complexity, we might need to utilize more data structures and thus trade higher space complexity for
