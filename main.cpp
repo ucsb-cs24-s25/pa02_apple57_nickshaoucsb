@@ -65,13 +65,16 @@ int main(int argc, char** argv){
 
     movieFile.close();
 
+// PART 1
     if (argc == 2){
         set<Movie> movie_set;
         for (auto m : movies) 
             movie_set.insert(m);
-        cout << endl;
-        for (auto m : movie_set)
-            cout << m.title << ", " << m.rating << endl;
+        for (auto it = movie_set.begin(); it != movie_set.end(); ++it)
+            if (next(it) == movie_set.end())
+                cout << it->title << ", " << it->rating;
+            else
+                cout << it->title << ", " << it->rating << endl;
         return 0;
     }
 
